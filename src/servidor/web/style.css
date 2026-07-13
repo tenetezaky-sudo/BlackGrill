@@ -1,0 +1,110 @@
+let mesaSeleccionada = null;
+
+// Función para forzar que se muestre el Login al cargar la página
+function inicializarVista() {
+    document.getElementById('seccion-auth').classList.remove('hidden');
+    document.getElementById('seccion-restaurante').classList.add('hidden');
+    document.getElementById('box-login').classList.remove('hidden');
+    document.getElementById('box-registro').classList.add('hidden');
+}
+
+// Ejecutar el inicio de inmediato
+inicializarVista();
+
+// Intercambiar formularios de Login y Registro
+function alternarAuth(mostrarLogin) {
+    if(mostrarLogin) {
+        document.getElementById('box-login').classList.remove('hidden');
+        document.getElementById('box-registro').classList.add('hidden');
+    } else {
+        document.getElementById('box-login').classList.add('hidden');
+        document.getElementById('box-registro').classList.remove('hidden');
+    }
+}
+
+// ACCIÓN: Registrar Usuario (Envía DNI, Nombre, Celular y Contraseña)
+function registrar() {
+    const dni = document.getElementById('reg-dni').value;
+    const nombre = document.getElementById('reg-nombre').value;
+    const celular = document.getElementById('reg-celular').value;
+    const password = document.getElementById('reg-pass').value;
+
+    if(!dni || !nombre || !celular || !password) return alert("Completa todos los campos");
+
+    fetch('/Registro', {
+        method: 'POST',
+        body: `dni=${dni}&nombre=${nombre}&celular=${celular}&password=${password}`
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+        if(data.success) alternarAuth(true); // Redireccionar automáticamente al login
+    })
+    .catch(error => console.error("Error en registro:", error));
+}
+
+// ACCIÓN: Iniciar Sesión
+function login() {
+    const dni = document.getElementById('login-dni').value;
+    const password = document.getElementById('login-pass').value;
+
+    if(!dni || !password) return alert("Ingresa tus credenciales");
+
+    fetch('/Login', {
+        method: 'POST',
+        body: `dni=${dni}&password=${password}`
+    })
+    .then(r => r.json())
+    .then(data => {
+        if(data.success) {
+            // Ocultar Login y mostrar el Restaurante
+            document.getElementById('seccion-auth').classList.add('hidden');
+            document.getElementById('seccion-restaurante').classList.remove('hidden');
+            document.getElementById('saludo-usuario').innerText = data.message;
+            
+            // Cargar el mapa de mesas desde SQL Server ahora que el usuario ingresó
+            cargarMesas(); 
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error("Error en login:", error));
+}
+
+// ACCIÓN: Cerrar Sesión
+function logout() {
+    // Limpiar campos y volver al estado inicial
+    document.getElementById('login-dni').value = "";
+    document.getElementById('login-pass').value = "";
+    mesaSeleccionada = null;
+    actualizarPanel(null);
+    inicializarVista();
+}
+
+// CARGAR MESAS DESDE EL SERVIDOR JAVA (SQL SERVER)
+function cargarMesas() {
+    fetch('/ObtenerMesas')
+        .then(r => r.json())
+        .then(mesas => renderizarMesas(mesas))
+        .catch(error => console.error("Error al cargar mesas:", error));
+}
+
+// Dibujar de forma interactiva las mesas en el plano
+function renderizarMesas(mesas) {
+    const contenedor = document.getElementById('contenedor-mesas');
+    contenedor.innerHTML = '';
+
+    mesas.forEach(mesa => {
+        const div = document.createElement('div');
+        div.classList.add('mesa');
+        // Mostrar el número de mesa y cuántas personas entran (2 o 4)
+        div.innerHTML = `<span>${mesa.numero}</span><span class="capacidad">${mesa.capacidad} pers</span>`;
+
+        // REGLA: Si en la BD el estado es 1 (Reservada), se pinta de rojo y NO se le añade el click
+        if (mesa.reservada) {
+            div.classList.add('ocupada'); 
+        } else {
+            div.classList.add('disponible'); // Se pinta de azul claro
+            div.addEventListener('click', () => seleccionarMesa(mesa, div));
+        }
+        contenedor

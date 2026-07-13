@@ -1,0 +1,128 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+}
+
+.hidden { display: none !important; }
+
+/* Contenedores de Autenticación */
+.auth-container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    max-width: 400px;
+    width: 100%;
+}
+.box-auth h2 { margin-top: 0; color: #1e293b; text-align: center; }
+.box-auth input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+.box-auth p { text-align: center; font-size: 14px; color: #64748b; }
+.box-auth a { color: #0ea5e9; text-decoration: none; font-weight: bold; }
+
+/* Contenedores del Restaurante */
+.restaurante-container {
+    display: flex;
+    gap: 30px;
+    max-width: 1000px;
+    width: 100%;
+}
+
+.mapa-sala, .panel-control {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.mapa-sala { flex: 2; }
+.panel-control { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.header-sala { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+#saludo-usuario { font-weight: bold; color: #0ea5e9; font-size: 16px; }
+
+.grid-mesas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* Diseño de Mesas Circulares */
+.mesa {
+    aspect-ratio: 1;
+    border-radius: 50%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 3px solid #cbd5e1;
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+
+.mesa .capacidad {
+    font-size: 12px;
+    font-weight: normal;
+    color: #475569;
+    margin-top: 4px;
+}
+
+.mesa.disponible:hover {
+    transform: scale(1.08);
+    border-color: #0ea5e9;
+}
+
+.mesa.ocupada {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border-color: #fca5a5;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.mesa.seleccionada {
+    background-color: #bbf7d0;
+    color: #166534;
+    border-color: #22c55e;
+    transform: scale(1.08);
+}
+
+/* Panel de control lateral */
+.leyenda { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+.item-leyenda { display: flex; align-items: center; gap: 12px; font-size: 14px; color: #334155;}
+.cuadro { width: 22px; height: 22px; border-radius: 6px; display: inline-block; }
+.cuadro.disponible { background: #e0f2fe; border: 2px solid #0ea5e9; }
+.cuadro.ocupada { background: #fee2e2; border: 2px solid #fca5a5; }
+.cuadro.seleccionada { background: #bbf7d0; border: 2px solid #22c55e; }
+
+button {
+    background-color: #22c55e;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+}
+button:hover:not(:disabled) { opacity: 0.9; }
+button:disabled { background-color: #cbd5e1; cursor: not-allowed; }
+hr { border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0; }

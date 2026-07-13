@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva de Mesas Interactiva</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="restaurante-container">
+        <div class="mapa-sala">
+            <h2>Plano del Restaurante</h2>
+            <div id="contenedor-mesas" class="grid-mesas"></div>
+        </div>
+
+        <div class="panel-control">
+            <h2>Detalles de Reserva</h2>
+            <div class="leyenda">
+                <div class="item-leyenda"><span class="cuadro disponible"></span> Disponible (2-4 pers)</div>
+                <div class="item-leyenda"><span class="cuadro ocupada"></span> Reservada</div>
+                <div class="item-leyenda"><span class="cuadro seleccionada"></span> Tu Selección</div>
+            </div>
+            
+            <hr>
+            
+            <div id="info-mesa">
+                <p>Selecciona una mesa en el plano para ver los detalles.</p>
+            </div>
+            
+            <button id="btn-reservar" disabled>Confirmar Reserva</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
